@@ -1,0 +1,23 @@
+{
+  "name": "oauth2",
+  "description": "test openid",
+  "version": "0.1.0",
+  "manifest_version": 2,
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5X6xfT1Lhl9wMxyrL6kLeql/6OF500M6c+knVR7iqbmUK73zDKjfu5oIeN1VORj+LRk5aauEMdq7tvOsLr0C2gmWfoGtKCyFJSgFAQLOLx6sL5bqJBZKtZiGOtRv0iYyroisGwSazoC6y2F+cNHniVi//DxtSA4zPUDZUl/EdmkO13ZtaE2etHu5Ya86ggJ6KbKpDac52b+C/F0JbXCW2HEzPSpcFzt/b7/OHsgWMiI2/9viE9fKPx7ymz2Q230NMc/CY7VlsUpHuVBYiwKFfSaGv1kXS7Ukh1B7LssAMzf5Oq8bFV/UZyFo/OV79j2l8HyL9IQyb4/JgmjA6RJ3PwIDAQAB",
+  "background": {
+    "scripts": [
+      "./background.js",
+      "./jsrsasign-all-min.js"
+    ]
+  },
+
+  "options_page": "./options.html",
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "identity"
+  ]
+
+
+}
