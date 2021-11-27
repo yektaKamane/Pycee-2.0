@@ -5,8 +5,7 @@
   "manifest_version": 2,
   "background": {
     "scripts": [
-      "./background.js",
-      "./jsrsasign-all-min.js"
+      "./background.js"
     ]
   },
 
