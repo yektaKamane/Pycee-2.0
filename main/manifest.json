@@ -22,7 +22,7 @@
     "content_scripts": [
         {
         "matches": ["https://www.online-python.com/*"],
-        "js": ["content.js", "fs.js", "bluebird.js"],
+        "js": ["content.js"],
         "css": ["content.css"]
         }
     ],
