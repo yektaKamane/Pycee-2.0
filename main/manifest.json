@@ -21,14 +21,14 @@
 
     "content_scripts": [
         {
-        "matches": ["https://colab.research.google.com/*"],
-        "js": ["content.js"],
+        "matches": ["https://www.online-python.com/*"],
+        "js": ["content.js", "fs.js", "bluebird.js"],
         "css": ["content.css"]
         }
     ],
     
     "permissions": [
         "tabs",
-        "https://colab.research.google.com/*"
+        "https://www.online-python.com/*"
     ]
 }
