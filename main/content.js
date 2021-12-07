@@ -47,6 +47,7 @@ function runTheCode(){
     E.g, if your list was [1, 3, 5, 7], and you asked for the element at index
     10, you would be well out of bounds and receive an error, as only elements 0
     through 3 exist.`
+    
     printSolutions(solutions);
 
     chrome.runtime.sendMessage({todo: "btn_is_pushed"});
