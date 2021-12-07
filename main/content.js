@@ -34,7 +34,7 @@ function runTheCode(){
         code_text += rawCodeText[i].textContent;
         code_text += `\n`;
     }
-
+    
     var solutionArea = document.getElementById("output")
     var solution_text = "found 3 solutions: ....";
     //console.log(solutionArea);

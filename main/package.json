@@ -4,14 +4,19 @@
   "description": "none",
   "main": "content.js",
   "directories": {
-    "test": "tests"
+    "test": "jest"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest tests/util.test.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "jest": "^27.4.3"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3",
+    "puppeteer": "^12.0.1"
   }
 }
