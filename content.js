@@ -34,14 +34,7 @@ function runTheCode(){
         code_text += rawCodeText[i].textContent;
         code_text += `\n`;
     }
-    
-    /*
-    var solutionArea = document.getElementById("output")
-    var solution_text = "found 3 solutions: ....";
-    //console.log(solutionArea);
-    solutionArea.innerHTML += `<div>` + solution_text + `</div>`;
-    //console.log(solutionArea);
-    console.log(code_text);*/
+    console.log(code_text);
 
     var solutions = `Generally, it means that you are providing an index for which a list element does not exist.
     E.g, if your list was [1, 3, 5, 7], and you asked for the element at index
