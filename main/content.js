@@ -98,7 +98,26 @@ function stopTheCode(){
     sendButtonMssg2();
 }
 
+function sendDataToServer(error, code){
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+        var str = request.response;
+        console.log(str);
+    }
+
+    // var type = "find_solutions";
+    request.open("POST", 'http://127.0.0.1:5000/', true);
+    var msg = { error, code };
+    var msgjson = JSON.stringify(msg);
+    request.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+    request.send(msgjson);
+
+}
+
 var runButton = document.getElementById("run-btn");
 runButton.addEventListener("click", runTheCode);
+
+
+
 
 
