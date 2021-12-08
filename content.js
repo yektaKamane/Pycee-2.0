@@ -1,4 +1,8 @@
 
+//(function(a,b){if("function"==typeof define&&define.amd)define([],b);else if("undefined"!=typeof exports)b();else{b(),a.FileSaver={exports:{}}.exports}})(this,function(){"use strict";function b(a,b){return"undefined"==typeof b?b={autoBom:!1}:"object"!=typeof b&&(console.warn("Deprecated: Expected third argument to be a object"),b={autoBom:!b}),b.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type)?new Blob(["\uFEFF",a],{type:a.type}):a}function c(a,b,c){var d=new XMLHttpRequest;d.open("GET",a),d.responseType="blob",d.onload=function(){g(d.response,b,c)},d.onerror=function(){console.error("could not download file")},d.send()}function d(a){var b=new XMLHttpRequest;b.open("HEAD",a,!1);try{b.send()}catch(a){}return 200<=b.status&&299>=b.status}function e(a){try{a.dispatchEvent(new MouseEvent("click"))}catch(c){var b=document.createEvent("MouseEvents");b.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),a.dispatchEvent(b)}}var f="object"==typeof window&&window.window===window?window:"object"==typeof self&&self.self===self?self:"object"==typeof global&&global.global===global?global:void 0,a=/Macintosh/.test(navigator.userAgent)&&/AppleWebKit/.test(navigator.userAgent)&&!/Safari/.test(navigator.userAgent),g=f.saveAs||("object"!=typeof window||window!==f?function(){}:"download"in HTMLAnchorElement.prototype&&!a?function(b,g,h){var i=f.URL||f.webkitURL,j=document.createElement("a");g=g||b.name||"download",j.download=g,j.rel="noopener","string"==typeof b?(j.href=b,j.origin===location.origin?e(j):d(j.href)?c(b,g,h):e(j,j.target="_blank")):(j.href=i.createObjectURL(b),setTimeout(function(){i.revokeObjectURL(j.href)},4E4),setTimeout(function(){e(j)},0))}:"msSaveOrOpenBlob"in navigator?function(f,g,h){if(g=g||f.name||"download","string"!=typeof f)navigator.msSaveOrOpenBlob(b(f,h),g);else if(d(f))c(f,g,h);else{var i=document.createElement("a");i.href=f,i.target="_blank",setTimeout(function(){e(i)})}}:function(b,d,e,g){if(g=g||open("","_blank"),g&&(g.document.title=g.document.body.innerText="downloading..."),"string"==typeof b)return c(b,d,e);var h="application/octet-stream"===b.type,i=/constructor/i.test(f.HTMLElement)||f.safari,j=/CriOS\/[\d]+/.test(navigator.userAgent);if((j||h&&i||a)&&"undefined"!=typeof FileReader){var k=new FileReader;k.onloadend=function(){var a=k.result;a=j?a:a.replace(/^data:[^;]*;/,"data:attachment/file;"),g?g.location.href=a:location=a,g=null},k.readAsDataURL(b)}else{var l=f.URL||f.webkitURL,m=l.createObjectURL(b);g?g.location=m:location.href=m,g=null,setTimeout(function(){l.revokeObjectURL(m)},4E4)}});f.saveAs=g.saveAs=g,"undefined"!=typeof module&&(module.exports=g)});
+
+//# sourceMappingURL=FileSaver.min.js.map
+
 chrome.runtime.sendMessage({todo: "showpageaction"});
 
 function sendButtonMssg1(){
@@ -20,7 +24,7 @@ function sendButtonMssg2(){
 }
 
 function runTheCode(){
-    console.log("Run button is clicked");
+    //console.log("Run button is clicked");
 
     var rawCodeText = document.getElementsByTagName("body")[0].getElementsByTagName("div")[0]
     .getElementsByClassName("main-content d-flex")[0].getElementsByClassName("container")[0]
@@ -34,76 +38,33 @@ function runTheCode(){
         code_text += rawCodeText[i].textContent;
         code_text += `\n`;
     }
-    
-    /*
+/*
+    var blob = new Blob(["Welcome to Websparrow.org."],
+    { type: "text/plain;charset=utf-8" });
+    saveAs(blob, "static.txt");
+*/
+
     var solutionArea = document.getElementById("output")
     var solution_text = "found 3 solutions: ....";
     //console.log(solutionArea);
     solutionArea.innerHTML += `<div>` + solution_text + `</div>`;
     //console.log(solutionArea);
-    console.log(code_text);*/
-
-    var solutions = `Generally, it means that you are providing an index for which a list element does not exist.
-    E.g, if your list was [1, 3, 5, 7], and you asked for the element at index
-    10, you would be well out of bounds and receive an error, as only elements 0
-    through 3 exist.`
-    
-    printSolutions(solutions);
+    // output the results in that text box with other outputs
 
     chrome.runtime.sendMessage({todo: "btn_is_pushed"});
     sendButtonMssg1();
 }
 
-function printSolutions(solutions){
-
-    var numberOfSolution = 5;
-
-    document.getElementById("d").style.height = "350px" //change heigth of output box
-    var start_text = "found 5 solutions: ....";
-
-    var result = document.createElement("div");   //create a div that contain all results from stackoverflow  
-    result.setAttribute("id", "result");   
-    document.getElementById("output").appendChild(result);    //add this div to div output
-    result.innerHTML += `<div id="d1">` + start_text + `</div>`;      // print the number of result that found   
-   
-    var List = document.createElement("ul");    //create list for slutions
-    List.setAttribute("id", "list"); 
-    document.getElementById("result").appendChild(List);
-
-
-    for(i=0 ; i< numberOfSolution ; i++){    //in this loop create items of list
-        var Li = document.createElement("li");
-        Li.setAttribute("id", i.toString());              
-        document.getElementById("list").appendChild(Li);         
-        
-        var solutionNumber = document.createElement("div");     // a div for number of solution
-        solutionNumber.setAttribute("id", "s"+i.toString());             
-        var textnode = document.createTextNode("solution "+(i+1)+" :");         
-        solutionNumber.appendChild(textnode); 
-        document.getElementById(i.toString()).appendChild(solutionNumber);
-
-        var description = document.createElement("div");    // a div for show solution
-        description.setAttribute("id", "d"+i.toString());             
-        textnode = document.createTextNode(solutions);         
-        description.appendChild(textnode);
-        document.getElementById(i.toString()).appendChild(description); 
-   
-    }
-}
-
-
 function stopTheCode(){
-    console.log("Program stopped");
+    //console.log("Program stopped");
     chrome.runtime.sendMessage({todo: "btn_is_pushed"});
     sendButtonMssg2();
 }
 /*
 //
 look 
-
-
-
-ireally dont know why it doesnt pushhhhh
+ireally dont know why it doesnt pushhhhh4
+this is how we get the data
         var node = document.getElementsByTagName("body")[0].getElementsByClassName("notebook-vertical")[0]
                         .getElementsByClassName("notebook-horizontal")[0].getElementsByClassName("layout vertical grow")[0]
                         .getElementsByClassName("layout horizontal grow")[0].getElementsByClassName("layout vertical grow notebook-tab-content")[0]
@@ -118,6 +79,7 @@ ireally dont know why it doesnt pushhhhh
                         .getElementsByClassName("view-lines monaco-mouse-cursor-text")[0].getElementsByClassName("view-line")[0];
 
         console.log(node)
+        this is how we push the data
         var text = document.getElementsByTagName("body")[0].getElementsByClassName("notebook-vertical")[0]
                         .getElementsByClassName("notebook-horizontal")[0].getElementsByClassName("layout vertical grow")[0]
                         .getElementsByClassName("layout horizontal grow")[0].getElementsByClassName("layout vertical grow notebook-tab-content")[0]
