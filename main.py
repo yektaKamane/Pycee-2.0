@@ -4,6 +4,7 @@ from pycee.answers import get_answers
 from pycee.errors import handle_error
 from pycee.utils import parse_args, remove_cache, return_answers_for_web
 from pycee.control import get_error_info_from_traceback
+# from pycee.control import get_error_info_from_traceback
 
 
 def create_JSON(so_answers: list, links: list, error_info: dict):
@@ -44,7 +45,7 @@ def create_JSON(so_answers: list, links: list, error_info: dict):
 
 
 def main(error:str, code:str):
-
+    print("main")
     error_info = get_error_info_from_traceback(error, code)
     args = parse_args(args=[error_info['file']])
     if args.rm_cache: #? 
@@ -52,9 +53,8 @@ def main(error:str, code:str):
     query = handle_error(error_info, args)
     stackoverflow_answers, _, links = get_answers(query, error_info, args)
     solution = return_answers_for_web(stackoverflow_answers, links, args)
-    # return create_JSON(stackoverflow_answers, links, error_info)
-    return solution
-
+    return create_JSON(stackoverflow_answers, links, error_info)
+    
 
         
 
@@ -71,6 +71,6 @@ SyntaxError: invalid syntax"""
     print(msg)\n
     return msg\n
 """
-    main(_traceback, _code)
-    # print(solution)
+    s = main(_traceback, _code)
+    print(s)
     

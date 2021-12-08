@@ -1,104 +1,204 @@
 
-chrome.runtime.sendMessage({todo: "showpageaction"});
 
-function sendButtonMssg1(){
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-        if (request.todo == "run"){
-            var stopButton = document.getElementById("stop-btn");
-            stopButton.addEventListener("click", stopTheCode);
-        }
-    })
-}
 
-function sendButtonMssg2(){
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-        if (request.todo == "run"){
-            runButton = document.getElementById("run-btn");
-            runButton.addEventListener("click", runTheCode);
-        }
-    })
-}
+function wait_for_run_button() {
 
-function runTheCode(){
-    console.log("Run button is clicked");
-
-    var rawCodeText = document.getElementsByTagName("body")[0].getElementsByTagName("div")[0]
-    .getElementsByClassName("main-content d-flex")[0].getElementsByClassName("container")[0]
-    .getElementsByClassName("split")[0].getElementsByTagName("div")[0]
-    .getElementsByClassName(" ace_editor ace-tm")[0].getElementsByClassName("ace_scroller")[0]
-    .getElementsByClassName("ace_content")[0].getElementsByClassName("ace_layer ace_text-layer")[0].getElementsByClassName("ace_line");
-
-    var i=0;
-    var code_text = ``; 
-    for (i=0; i<rawCodeText.length; i++){
-        code_text += rawCodeText[i].textContent;
-        code_text += `\n`;
+    var element = document.getElementById("run-btn");
+    if (!element) {
+        setTimeout(wait_for_run_button, 10);
+        return;
     }
-    
-    /*
-    var solutionArea = document.getElementById("output")
-    var solution_text = "found 3 solutions: ....";
-    //console.log(solutionArea);
-    solutionArea.innerHTML += `<div>` + solution_text + `</div>`;
-    //console.log(solutionArea);
-    console.log(code_text);*/
-
-    var solutions = `Generally, it means that you are providing an index for which a list element does not exist.
-    E.g, if your list was [1, 3, 5, 7], and you asked for the element at index
-    10, you would be well out of bounds and receive an error, as only elements 0
-    through 3 exist.`
-    
-    printSolutions(solutions);
-
-    chrome.runtime.sendMessage({todo: "btn_is_pushed"});
-    sendButtonMssg1();
+    document.getElementById("run-btn").addEventListener("click", clicked);
 }
 
-function printSolutions(solutions){
 
-    var numberOfSolution = 5;
+function clicked() {
+    check_for_changes()
+}
 
-    document.getElementById("d").style.height = "350px" //change heigth of output box
-    var start_text = "found 5 solutions: ....";
+// function upvote(index) {
 
-    var result = document.createElement("div");   //create a div that contain all results from stackoverflow  
-    result.setAttribute("id", "result");   
-    document.getElementById("output").appendChild(result);    //add this div to div output
-    result.innerHTML += `<div id="d1">` + start_text + `</div>`;      // print the number of result that found   
-   
-    var List = document.createElement("ul");    //create list for slutions
-    List.setAttribute("id", "list"); 
-    document.getElementById("result").appendChild(List);
+//     if (solution_values[index] == 1)
+//         return
+
+//     var request = new XMLHttpRequest();
+//     var type = "upvote";
+//     var link = solution_links[index];
+//     var value = 1;
+//     request.open("POST", 'https://ariaabrishamdar.pythonanywhere.com/', true);
+//     var msg = { type, error_type, link, value };
+//     var msgjson = JSON.stringify(msg);
+//     request.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+//     request.send(msgjson);
+
+//     var element = document.getElementById("score-" + index.toString());
+//     if (element) {
+//         var text = document.getElementById("score-" + index.toString()).innerHTML;
+
+//         var is_negative = false;
+//         if (text.includes("-"))
+//             is_negative = true;
+
+//         var number = parseInt(text.match(/\d+/)[0]);
+//         if (is_negative)
+//             number = -number;
+
+//         number += 1;
+
+//         document.getElementById("score-" + index.toString()).innerHTML = ("Score: " + number.toString());
+//     }
 
 
-    for(i=0 ; i< numberOfSolution ; i++){    //in this loop create items of list
-        var Li = document.createElement("li");
-        Li.setAttribute("id", i.toString());              
-        document.getElementById("list").appendChild(Li);         
-        
-        var solutionNumber = document.createElement("div");     // a div for number of solution
-        solutionNumber.setAttribute("id", "s"+i.toString());             
-        var textnode = document.createTextNode("solution "+(i+1)+" :");         
-        solutionNumber.appendChild(textnode); 
-        document.getElementById(i.toString()).appendChild(solutionNumber);
+//     if (solution_values[index] == -1) {
+//         solution_values[index] = 0;
+//         upvote(index);
+//     }
+//     else
+//         solution_values[index] = 1;
+//     return;
+// }
 
-        var description = document.createElement("div");    // a div for show solution
-        description.setAttribute("id", "d"+i.toString());             
-        textnode = document.createTextNode(solutions);         
-        description.appendChild(textnode);
-        document.getElementById(i.toString()).appendChild(description); 
-   
+// function downvote(index) {
+
+//     if (solution_values[index] == -1)
+//         return
+
+//     var request = new XMLHttpRequest();
+//     var type = "downvote";
+//     var link = solution_links[index];
+//     var value = -1;
+//     request.open("POST", 'https://ariaabrishamdar.pythonanywhere.com/', true);
+//     var msg = { type, error_type, link, value };
+//     var msgjson = JSON.stringify(msg);
+//     request.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+//     request.send(msgjson);
+
+//     var element = document.getElementById("score-" + index.toString());
+//     if (element) {
+//         var text = document.getElementById("score-" + index.toString()).innerHTML;
+
+//         var is_negative = false;
+//         if (text.includes("-"))
+//             is_negative = true;
+
+//         var number = parseInt(text.match(/\d+/)[0]);
+//         if (is_negative)
+//             number = -number;
+
+//         number -= 1;
+
+//         document.getElementById("score-" + index.toString()).innerHTML = ("Score: " + number.toString());
+//     }
+
+//     if (solution_values[index] == 1) {
+//         solution_values[index] = 0;
+//         downvote(index);
+//     }
+//     else
+//         solution_values[index] = -1;
+//     return;
+// }
+
+
+function check_for_changes() {
+
+    var content = document.getElementById("wrap").innerText;
+
+    var list = document.querySelectorAll(".warning,.error");
+
+    var error_message = "";
+
+    if (list.length <= 0) {
+      setTimeout(check_for_changes, 100);
+      return;
     }
+
+    for (let i = 0; i < list.length; i++) {
+      error_message += list[i].innerText;
+    }
+
+
+    var editor = document.getElementById("editor");
+    var code = editor.getElementsByClassName("ace_layer ace_text-layer")[0].innerText;
+
+
+    setTimeout(send_text_to_server.bind(null, error_message, code), 250);
 }
 
 
-function stopTheCode(){
-    console.log("Program stopped");
-    chrome.runtime.sendMessage({todo: "btn_is_pushed"});
-    sendButtonMssg2();
+function send_text_to_server(error, code) {
+
+    var request = new XMLHttpRequest();
+
+     request.onreadystatechange = function() {
+        if (request.readyState === 4) {
+
+            //var str = request.response;
+
+            var json_data = JSON.parse(request.response).items;
+            var str = "";
+
+            solution_links = []
+            solution_values = []
+
+            for (let i = 0; i < json_data.length; i++) {
+
+                str += json_data[i].body;
+                str += json_data[i].link_text;
+                str += '<button id="upvote-button-' + i.toString() + '"><img src=' + chrome.extension.getURL('images/upvote.png') + '></button>';
+                str += '     ';
+                str += '<button id="downvote-button-' + i.toString() + '"><img src=' + chrome.extension.getURL('images/downvote.png') + '></button>';
+                str += '<p style="font-size:18px;" id=score-' + i.toString() + '> Score: ' + json_data[i].score +  ' </p>';
+
+                solution_links.push(json_data[i].link);
+                solution_values.push(0);
+                error_type = json_data[i].error_type;
+            }
+
+            set_output_text(str);
+
+            for (let i = 0; i < json_data.length; i++) {
+                var element_1 = document.getElementById("upvote-button-" + i.toString());
+                var element_2 = document.getElementById("downvote-button-" + i.toString());
+                if (element_1)
+                    document.getElementById("upvote-button-" + i.toString()).addEventListener("click", function(){
+                        upvote(i);
+                    }, false);
+                if (element_2)
+                    document.getElementById("downvote-button-" + i.toString()).addEventListener("click", function(){
+                        downvote(i);
+                    }, false);
+            }
+        }
+    }
+    // var type = "find_solutions";
+    request.open("POST", 'http://127.0.0.1:5000', true);
+    var msg = { error, code };
+    var msgjson = JSON.stringify(msg);
+    request.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+    request.send(msgjson);
 }
 
-var runButton = document.getElementById("run-btn");
-runButton.addEventListener("click", runTheCode);
+
+function set_output_text(text) {
+
+    var output_text = text;
+    var current_content = document.getElementById("wrap").innerHTML;
+    document.getElementById("wrap").innerHTML =  current_content +'<p id="term-input">\n\n' + output_text + '</p>';
+
+    wait_for_run_button()
+}
+
+
+
+wait_for_run_button()
+
+document.getElementById("d").style.height = "calc(100% - 2.5px)";
+
+var error_type = "";
+var solution_links = [];
+var solution_values = [];
+
+
 
 
