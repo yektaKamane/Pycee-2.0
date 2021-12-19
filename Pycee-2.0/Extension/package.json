@@ -1,0 +1,22 @@
+{
+  "name": "pycee_front_end",
+  "version": "1.0.0",
+  "description": "none",
+  "main": "content.js",
+  "directories": {
+    "test": "jest"
+  },
+  "scripts": {
+    "test": "jest tests/util.test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^27.4.3"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3",
+    "puppeteer": "^12.0.1"
+  }
+}
