@@ -2,40 +2,23 @@
 
 const {getInnerCode} = require('./util');
 
-test('should split data code', ()=>{
-    var expected_input = `<div>print("hello world")</div>`;
-    var expected_output = [`<div>print("hello world")</div>`];
-    const text = getInnerCode(expected_input);
-    expect(text).toStrictEqual(expected_output);
-});
-/*
-test('should', ()=>{
-    var expected_input = `<div>def sum(a, b):</div>
-    <div>    return (a + b)</div>
-    <div>       </div>
-    <div>a = int(input('Enter 1st number: '))</div>
-    <div>b = int(input('Enter 1st number: '))</div>
-    `;
-    var expected_output = [`<div>def sum(a, b):</div>`,
-    `<div>    return (a + b)</div>`,
-    `<div>       </div>`,
-    `<div>a = int(input('Enter 1st number: '))</div>`,
-    `<div>b = int(input('Enter 1st number: '))</div>`];
-    const text = getInnerCode(expected_input);
-    expect(text).toStrictEqual(expected_output);
-});
+test('should turn solution array to html tags', ()=>{
+    var expected_input = [`The "SyntaxError: unexpected EOF while parsing"`];
+    var expected_output = 
+    `'<div id="pycee-inserted" style="padding: 10px; margin: 10px auto; width: 92%">'`
+        + `<div id="pycee-head" style="margin: 30px auto; color: #3770A0; font-size: 18px; border-bottom: 1px solid; font-weight: 600;">` 
+            + `<p style="margin-left: 15px; "> Pycee found ` + 1 + " solutions </p>" 
+        + '</div>';
 
-test('should', ()=>{
-    var expected_input = `<div>print(f'Sum of {a} and {b} is {sum(a, b)}')</div>`;
-    var expected_output = [`<div>print(f'Sum of {a} and {b} is {sum(a, b)}')</div>`];
-    const text = getInnerCode(expected_input);
-    expect(text).toStrictEqual(expected_output);
-});
+        + `<div id="pycee-solutions" style="margin: 0 10px;">`
+            + `<p style="color: #3770A0; font-size: 14px; font-weight: 600;"> Soultion ` + 1 + ": </p>"
+                                            // here sits the solution
+            + `<p style="margin: 0 10px;">` + `The "SyntaxError: unexpected EOF while parsing"` + "</p>"
+            + '<br>'
+        + "</div>"
 
-test('should', ()=>{
-    var expected_input = `<div># Online Python - IDE, Editor, Compiler, Interpreter</div>`;
-    var expected_output = [`<div></div>`];
+    + output_text 
+    + '</div>';
     const text = getInnerCode(expected_input);
     expect(text).toStrictEqual(expected_output);
 });
-*/
