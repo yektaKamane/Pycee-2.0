@@ -22,6 +22,7 @@ test('should turn solution array to html tags', ()=>{
     const text = getInnerCode(expected_input);
     expect(text).toStrictEqual(expected_output);
 });*/
+
 // ZeroDivisionError: division by zero
 test('should turn solution array to html tags', ()=>{
     var expected_input = [`ZeroDivisionError: division by zero`];
