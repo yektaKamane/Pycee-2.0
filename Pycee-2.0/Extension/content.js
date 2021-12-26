@@ -91,8 +91,6 @@ function set_output_text(text) {
 }
 
 function show_in_tab(){
-    //console.log(solutions);
-    //var output_text = text;
     var current_content = document.getElementById("wrap").innerHTML;
     var i = 0;
     var output_text = ``;

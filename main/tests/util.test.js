@@ -8,7 +8,7 @@ test('should turn solution array to html tags', ()=>{
     `'<div id="pycee-inserted" style="padding: 10px; margin: 10px auto; width: 92%">'`
         + `<div id="pycee-head" style="margin: 30px auto; color: #3770A0; font-size: 18px; border-bottom: 1px solid; font-weight: 600;">` 
             + `<p style="margin-left: 15px; "> Pycee found ` + 1 + " solutions </p>" 
-        + '</div>';
+        + '</div>'
 
         + `<div id="pycee-solutions" style="margin: 0 10px;">`
             + `<p style="color: #3770A0; font-size: 14px; font-weight: 600;"> Soultion ` + 1 + ": </p>"
