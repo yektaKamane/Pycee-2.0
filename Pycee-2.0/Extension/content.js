@@ -21,10 +21,17 @@ function check_for_changes() {
     var code = document.getElementById("editor").getElementsByClassName("ace_scroller")[0].innerText;
     console.log(code);
 
-    var error_message = document.getElementById("terminal").innerText;
-    error_message = error_message.substring(0, error_message.length -2);
-    console.log(error_message);
+    var error_message = document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].getElementsByClassName("ace_layer ace_text-layer")[0].innerText;
 
+    if (error_message.length <= 0) {
+        setTimeout(check_for_changes, 100);
+        return;
+    }
+    else{
+        error_message = error_message.substring(0, error_message.length -2);
+        console.log(error_message);
+    }
+  
     setTimeout(send_text_to_server.bind(null, error_message, code), 250);
 }
 
@@ -45,8 +52,10 @@ function send_text_to_server(error, code) {
             setTimeout(show_in_tab, 500);
         }
     }
-    request.open("POST", 'http://127.0.0.1:5000', true);
-    var msg = { error, code };
+    var number_of_solutions = 3;
+    var type = "find_solutions";
+    request.open("POST", 'https://neginaryapour.pythonanywhere.com/', true);
+    var msg = { type, error, code, number_of_solutions };
     var msgjson = JSON.stringify(msg);
     request.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
     request.send(msgjson);
@@ -58,19 +67,36 @@ function show_in_tab(){
     console.log(solutions);
 
     var current_content = document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].innerHTML;
+    current_content = current_content.replaceAll(globa_extra, "");
     var error_len =  document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].getElementsByClassName("ace_layer ace_text-layer")[0].getElementsByTagName("div").length;
     var new_line = error_len/2;
-    console.log(new_line);
 
-    var n = document.getElementById("terminal").style.height;
-    console.log(n);
-    document.getElementById("terminal").style.height = ((new_line + 1) * 22) + "px"; // make this an even bigger number
-    n = document.getElementById("terminal").style.height;
-    console.log(n);
+    document.getElementById("terminal").style.height = "700px"; // make this even bigger
 
-    document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].innerHTML =  
-    current_content 
-    + `<div class="ace_content" style="top: ` + (new_line * 22) + `px; z-index: 100;"> pycee </div>`;
+    var extra_content = ``;
+    extra_content += `<div class="ace_content" style="top: ` + (new_line * 22) + `px; z-index: 100; height: 100%;">`;
+        extra_content += `<div style="height: fit-content; margin: 10px 30px; background-color: #E6D7F5; padding: 10px; border-radius: 6px;">`;
+            extra_content += `<div id="pycee-upper-head" style="border-bottom: 1px solid black; margin: 10px;">`;
+                extra_content += "Pycee has found " + solutions.length + " solutions";
+            extra_content += `</div>`;   
+
+            extra_content += `<div id="pycee-body">`;
+                var i = 0;
+                for (i=0; i<solutions.length; i++){
+                    extra_content += `<div style="color: purple; font-size: 17 px;">`;
+                        extra_content += `Solution` + (i+1);
+                    extra_content += `</div>`;
+                }
+                
+            extra_content += `</div>`;           
+        extra_content += `</div>`;
+    extra_content += `</div>`;
+
+    globa_extra = extra_content;
+
+
+    document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].innerHTML =  current_content + extra_content;
+
     // "";
     // var i = 0;
     // var output_text = ``;
@@ -100,6 +126,7 @@ function show_in_tab(){
 
 
 var solutions = [];
+var globa_extra = "";
 wait_for_run_button();
 //document.getElementById("d").style.height = "calc(100% - 2.5px)";
 
