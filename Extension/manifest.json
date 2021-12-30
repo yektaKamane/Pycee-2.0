@@ -1,0 +1,30 @@
+{
+    "manifest_version": 2,
+    "name": "Pycee",
+    "version": "2.1",
+    "description": "Python Compiler Error Solution Finder",
+
+    "icons": {
+        "16": "./images/icon16.png"
+    },
+    
+    "page_action": {
+        "default_icon": "./images/icon16.png",
+        "default_popup": "popup.html",
+        "default_title": "Pycee"
+    },
+
+
+    "content_scripts": [
+        {
+        "matches": ["https://www.programiz.com/python-programming/online-compiler/*"],
+        "js": ["content.js"],
+        "css": ["content.css"]
+        }
+    ],
+    
+    "permissions": [
+        "tabs",
+        "https://www.programiz.com/python-programming/online-compiler/*"
+    ]
+}

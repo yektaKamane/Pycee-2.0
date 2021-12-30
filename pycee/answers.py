@@ -14,7 +14,7 @@ import requests
 
 from .utils import ANSWERS_URL
 from .utils import Question, Answer
-from vote.updownvote import read_json
+#from vote.updownvote import read_json
 
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
@@ -75,7 +75,7 @@ def get_answers(query, error_info: dict, cmd_args: Namespace):
         questions, answers = ask_live(query, error_info, cmd_args)
 
     sorted_answers = sorted(answers, key=attrgetter("score"), reverse=True)[: cmd_args.n_answers]
-    sorted_answers = sort_by_updownvote(sorted_answers, error_info)
+    #sorted_answers = sort_by_updownvote(sorted_answers, error_info)
 
     summarized_answers = []
     links = []
