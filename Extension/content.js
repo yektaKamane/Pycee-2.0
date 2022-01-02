@@ -150,7 +150,7 @@ setInterval(function(){
         document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "1600px";
     }
 
-}, 100);
+}, 50);
 
 add_the_solution_tag();
 wait_for_run_button();
