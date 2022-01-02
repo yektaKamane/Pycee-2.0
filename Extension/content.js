@@ -8,15 +8,23 @@ function wait_for_run_button() {
     
     var el2 = document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
     .getElementsByClassName("ace_layer ace_marker-layer")[0];
-    
+
     if (el2 != undefined){
-        document.getElementById("terminal").style.height = '1600px';
-        document.getElementById("editor").style.height = '1600px';
         document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
         .getElementsByClassName("ace_layer ace_marker-layer")[0].style.height = "1600px";
         document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "1600px";
-    
     }
+
+    var value = document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
+    .getElementsByClassName("ace_layer ace_marker-layer")[0].style.height;
+
+    if (value != 1600){
+        document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
+        .getElementsByClassName("ace_layer ace_marker-layer")[0].style.height = "1600px";
+        document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "1600px";
+        setTimeout(wait_for_run_button, 100);
+    }
+    
 
     document.getElementsByTagName("body")[0].getElementsByClassName("container")[0].getElementsByClassName("wrapper")[0].getElementsByClassName("editor-wrapper")[0].getElementsByClassName("editor-desktop-top-bar")[0].getElementsByClassName("desktop-top-bar__btn-wrapper")[0].getElementsByClassName("desktop-run-button")[0]
     .addEventListener("click", clicked);
