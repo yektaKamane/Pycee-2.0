@@ -8,11 +8,13 @@ function wait_for_run_button() {
     
     var el2 = document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
     .getElementsByClassName("ace_layer ace_marker-layer")[0];
+    
     if (el2 != undefined){
-        
+        document.getElementById("terminal").style.height = '1600px';
+        document.getElementById("editor").style.height = '1600px';
         document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
-        .getElementsByClassName("ace_layer ace_marker-layer")[0].style.height = "fit-content";
-        document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "fit-content";
+        .getElementsByClassName("ace_layer ace_marker-layer")[0].style.height = "1600px";
+        document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "1600px";
     
     }
 
@@ -29,7 +31,7 @@ function clicked() {
 function check_for_changes() {
 
     var code = document.getElementById("editor").getElementsByClassName("ace_scroller")[0].innerText;
-    console.log(code);
+    // console.log(code);
 
     var error_message = document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].getElementsByClassName("ace_layer ace_text-layer")[0].innerText;
 
@@ -39,7 +41,7 @@ function check_for_changes() {
     }
     else{
         error_message = error_message.substring(0, error_message.length -2);
-        console.log(error_message);
+        // console.log(error_message);
     }
   
     setTimeout(send_text_to_server.bind(null, error_message, code), 250);
@@ -73,8 +75,9 @@ function send_text_to_server(error, code) {
 
 
 function show_in_tab(){
+    document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "1600px";
     
-    console.log(solutions[0]);
+    // console.log(solutions[0]);
     var pycee = document.getElementById("pycee");
     if (pycee == undefined){
         add_the_solution_tag();
@@ -84,7 +87,7 @@ function show_in_tab(){
     var new_line = error_len/2;
 
     var extra_content = ``;
-    extra_content += `<div style="top: ` + (new_line * 22) + `px; z-index: 100; height: 100%; position: absolute; width: 100%;">`;
+    extra_content += `<div style="top: ` + (new_line * 22) + `px; z-index: 100; height: 1600px; position: absolute; width: 100%;">`;
         extra_content += `<div id="backG" style=" margin: 10px; background-color: #E6D7F5; padding: 10px; border-radius: 6px;">`;
             extra_content += `<div id="pycee-upper-head">`;
                 extra_content += "Pycee has found " + solutions.length + " solutions";
