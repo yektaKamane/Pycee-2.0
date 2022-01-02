@@ -76,7 +76,7 @@ function send_text_to_server(error, code) {
 function show_in_tab(){
     document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "1600px";
     
-    console.log(solutions[2]);
+    console.log(solutions[0]);
     var pycee = document.getElementById("pycee");
     if (pycee == undefined){
         add_the_solution_tag();
