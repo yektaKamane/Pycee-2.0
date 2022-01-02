@@ -149,8 +149,8 @@ setInterval(function(){
         .getElementsByClassName("ace_layer ace_marker-layer")[0].style.height = "1600px";
         document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "1600px";
     }
-    
-}, 500);
+
+}, 100);
 
 add_the_solution_tag();
 wait_for_run_button();
