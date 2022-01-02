@@ -1,96 +1,238 @@
+// const lib = require("./check_error");
 
-chrome.runtime.sendMessage({todo: "showpageaction"});
-
-function sendButtonMssg1(){
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-        if (request.todo == "run"){
-            var stopButton = document.getElementById("stop-btn");
-            stopButton.addEventListener("click", stopTheCode);
-        }
-    })
-}
-
-function sendButtonMssg2(){
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-        if (request.todo == "run"){
-            runButton = document.getElementById("run-btn");
-            runButton.addEventListener("click", runTheCode);
-        }
-    })
-}
-
-function runTheCode(){
-    console.log("Run button is clicked");
-
-    var rawCodeText = document.getElementsByTagName("body")[0].getElementsByTagName("div")[0]
-    .getElementsByClassName("main-content d-flex")[0].getElementsByClassName("container")[0]
-    .getElementsByClassName("split")[0].getElementsByTagName("div")[0]
-    .getElementsByClassName(" ace_editor ace-tm")[0].getElementsByClassName("ace_scroller")[0]
-    .getElementsByClassName("ace_content")[0].getElementsByClassName("ace_layer ace_text-layer")[0].getElementsByClassName("ace_line");
-
-    var i=0;
-    var code_text = ``; 
-    for (i=0; i<rawCodeText.length; i++){
-        code_text += rawCodeText[i].textContent;
-        code_text += `\n`;
+function wait_for_run_button() {
+    var element = document.getElementsByTagName("body")[0].getElementsByClassName("container")[0].getElementsByClassName("wrapper")[0].getElementsByClassName("editor-wrapper")[0].getElementsByClassName("editor-desktop-top-bar")[0].getElementsByClassName("desktop-top-bar__btn-wrapper")[0].getElementsByClassName("desktop-run-button")[0];
+    if (!element) {
+        setTimeout(wait_for_run_button, 100);
+        return;
     }
-    console.log(code_text);
-
-    var solutions = `Generally, it means that you are providing an index for which a list element does not exist.
-    E.g, if your list was [1, 3, 5, 7], and you asked for the element at index
-    10, you would be well out of bounds and receive an error, as only elements 0
-    through 3 exist.`
-    printSolutions(solutions);
-
-    chrome.runtime.sendMessage({todo: "btn_is_pushed"});
-    sendButtonMssg1();
-}
-
-function printSolutions(solutions){
-
-    var numberOfSolution = 5;
-
-    document.getElementById("d").style.height = "350px" //change heigth of output box
-    var start_text = "found 5 solutions: ....";
-
-    var result = document.createElement("div");   //create a div that contain all results from stackoverflow  
-    result.setAttribute("id", "result");   
-    document.getElementById("output").appendChild(result);    //add this div to div output
-    result.innerHTML += `<div id="d1">` + start_text + `</div>`;      // print the number of result that found   
-   
-    var List = document.createElement("ul");    //create list for slutions
-    List.setAttribute("id", "list"); 
-    document.getElementById("result").appendChild(List);
-
-
-    for(i=0 ; i< numberOfSolution ; i++){    //in this loop create items of list
-        var Li = document.createElement("li");
-        Li.setAttribute("id", i.toString());              
-        document.getElementById("list").appendChild(Li);         
+    
+    var el2 = document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
+    .getElementsByClassName("ace_layer ace_marker-layer")[0];
+    if (el2 != undefined){
         
-        var solutionNumber = document.createElement("div");     // a div for number of solution
-        solutionNumber.setAttribute("id", "s"+i.toString());             
-        var textnode = document.createTextNode("solution "+(i+1)+" :");         
-        solutionNumber.appendChild(textnode); 
-        document.getElementById(i.toString()).appendChild(solutionNumber);
+        document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
+        .getElementsByClassName("ace_layer ace_marker-layer")[0].style.height = "fit-content";
+        document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "fit-content";
+    
+    }
 
-        var description = document.createElement("div");    // a div for show solution
-        description.setAttribute("id", "d"+i.toString());             
-        textnode = document.createTextNode(solutions);         
-        description.appendChild(textnode);
-        document.getElementById(i.toString()).appendChild(description); 
-   
+    document.getElementsByTagName("body")[0].getElementsByClassName("container")[0].getElementsByClassName("wrapper")[0].getElementsByClassName("editor-wrapper")[0].getElementsByClassName("editor-desktop-top-bar")[0].getElementsByClassName("desktop-top-bar__btn-wrapper")[0].getElementsByClassName("desktop-run-button")[0]
+    .addEventListener("click", clicked);
+}
+
+
+function clicked() {
+    setTimeout(check_for_changes, 500);
+}
+
+
+function check_for_changes() {
+
+    var code = document.getElementById("editor").getElementsByClassName("ace_scroller")[0].innerText;
+    console.log(code);
+
+    var error_message = document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].getElementsByClassName("ace_layer ace_text-layer")[0].innerText;
+    error = error_message;
+
+    if (error_message.length <= 0) {
+        setTimeout(check_for_changes, 100);
+        return;
+    }
+    else{
+        error_message = error_message.substring(0, error_message.length -2);
+        console.log(error_message);
+    }
+  
+    setTimeout(send_text_to_server.bind(null, error_message, code), 250);
+}
+
+
+function send_text_to_server(error, code) {
+
+    var request = new XMLHttpRequest();
+
+     request.onreadystatechange = function() {
+        if (request.readyState === 4) {
+            var json_data = JSON.parse(request.response).items;
+            var str = "";
+            solutions = [];
+            for (let i = 0; i < json_data.length; i++) {
+                str += json_data[i].body;
+                solutions.push(json_data[i].body);
+            }
+            setTimeout(show_in_tab, 500);
+        }
+    }
+    var number_of_solutions = 3;
+    var type = "find_solutions";
+    request.open("POST", 'https://neginaryapour.pythonanywhere.com/', true);
+    var msg = { type, error, code, number_of_solutions };
+    var msgjson = JSON.stringify(msg);
+    request.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+    request.send(msgjson);
+}
+
+
+function show_in_tab(){
+    
+    console.log(solutions[0]);
+    var pycee = document.getElementById("pycee");
+    if (pycee == undefined){
+        add_the_solution_tag();
+    }
+    
+    var error_len =  document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].getElementsByClassName("ace_layer ace_text-layer")[0].getElementsByTagName("div").length;
+    var new_line = error_len/2;
+
+    var check_error  = checkError(error);
+    var result2 = correctWorld(error);
+
+    var extra_content = ``;
+    extra_content += `<div style="top: ` + (new_line * 22) + `px; z-index: 100; height: 100%; position: absolute; width: 100%;">`;
+        extra_content += `<div id="backG" style=" margin: 10px; background-color: #E6D7F5; padding: 10px; border-radius: 6px;">`;
+            extra_content += `<div id="pycee-upper-head">`;
+                extra_content += "Pycee has found " + solutions.length + " solutions";
+            extra_content += `</div>`;   
+
+            extra_content += `<div id="pycee-body" style="margin: 10px;">`;
+            if(check_error){
+                extra_content += `<div style="font-family: Arial, Helvetica, sans-serif;">`;
+                        extra_content += `<div id="solNumber"> Pycee Solution ` + `</div>`;
+                        extra_content += `<div id="solution-body" style="width:100%; height: fit-content; white-space: pre-line;">`;
+                            extra_content += "do you mean  "+`<code >`+ result2+"</code>" +" word ?" ;
+                        extra_content += `</div>`;
+                    extra_content += `</div>`;
+            }
+            
+                var i = 0;
+                for (i=0; i<solutions.length; i++){
+                    extra_content += `<div style="font-family: Arial, Helvetica, sans-serif;">`;
+                        extra_content += `<div id="solNumber"> Solution ` + (i+1) + `</div>`;
+                        extra_content += `<div id="solution-body" style="width:100%; height: fit-content; white-space: pre-line;">`;
+                            extra_content += solutions[i];
+                        extra_content += `</div>`;
+                    extra_content += `</div>`;
+                }
+                
+            extra_content += `</div>`;           
+        extra_content += `</div>`;
+    extra_content += `</div>`;
+
+
+
+    document.getElementById("pycee").style.minHeight = "1600px";
+    document.getElementById("pycee").innerHTML = extra_content;
+
+    // document.getElementById("terminal").getElementsByClassName("ace_scrollbar ace_scrollbar-v")[0].style.height = "2000px";
+    
+    document.getElementById("terminal").style.height = '1600px';
+    document.getElementById("editor").style.height = '1600px';
+    document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].style.height = "1600px";
+    document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0].style.height = "1600px";
+    
+    wait_for_run_button();
+}
+
+
+function add_the_solution_tag(){
+    var t = document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
+    .getElementsByClassName("ace_layer ace_marker-layer")[0];
+    if (t === undefined ){
+        setTimeout(add_the_solution_tag, 100);
+        return;
+    }
+    var current_value = t.innerHTML;
+    document.getElementById("terminal").getElementsByClassName("ace_scroller")[0].getElementsByClassName("ace_content")[0]
+    .getElementsByClassName("ace_layer ace_marker-layer")[0]
+    .innerHTML = current_value + `<div id="pycee"></div>`;
+}
+
+keywords = [ "False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except"
+    ,"finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise"
+    ,"return","try","while","with","yield" , "print"];
+
+function checkError(str)
+{
+    if(str.includes("is not defined")){
+        keyword_array = str.split(" ");
+        console.log(keyword_array);
+        misspelled_world = keyword_array[13].slice(1,-1);
+        return misspelled_world
+    }
+    return false;
+}
+
+// return the number of difference between missplelled_world and keyword
+function getDifference(a, b)
+{
+    var string1 = a.split('');
+    var string2 = b.split('');
+    var compare = 0;
+    var max ="";
+    
+    // var leng = Math.max(string1.length , string2.length)
+    // if(string1.length > string2.length){
+    //     max = "str1";
+    // }
+    // else {
+    //     max = "str2";
+    // }
+       // if (max == "str1"){
+        //     if(!string1.includes(string2[i])){
+        //         compare++;
+        //     }
+        // }
+        // else if(max == "str2"){
+        //     if(!string2.includes(string1[i])){
+        //         compare++;
+        //     }
+        // }
+        
+    // var arr = string1.length > string2.length ? string1 : string2; 
+    var leng = string1.length;
+    if (Math.abs(string2.length - string1.length) <2){
+        for (let i = 0 ; i < leng ; i++){
+            if(!string2.includes(string1[i])){
+                compare++;
+            }
+        }
+    }
+    else {
+        return (Math.abs(string2.length - string1.length))
+    }
+    
+    return compare;   
+}
+
+
+// fine most simillar keyword to misspelled_world
+function correctWorld(error)
+{
+    var misspelled_world = checkError(error);
+    console.log("misspelled_world is "+misspelled_world);
+    if(misspelled_world){
+        console.log("in if")
+        var result = [];
+        for (let i=0 ; i <36 ; i++){
+            console.log(".")
+            console.log("difference is "+getDifference("print",misspelled_world))
+            if(getDifference(misspelled_world,keywords[i]) <2 ){
+                console.log("find it");
+                result.push(keywords[i])
+            }
+        }
+        return result
+    }
+    else{
+        return false;
     }
 }
 
-
-function stopTheCode(){
-    console.log("Program stopped");
-    chrome.runtime.sendMessage({todo: "btn_is_pushed"});
-    sendButtonMssg2();
-}
-
-var runButton = document.getElementById("run-btn");
-runButton.addEventListener("click", runTheCode);
+var solutions = [];
+var error;
+var globa_extra = "";
+add_the_solution_tag();
+wait_for_run_button();
 
 
