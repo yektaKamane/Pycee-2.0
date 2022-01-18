@@ -60,6 +60,7 @@ function send_text_to_server(error, code) {
             for (let i = 0; i < json_data.length; i++) {
                 str += json_data[i].body;
                 solutions.push(json_data[i].body);
+                links.push(json_data[i].link_text);
             }
             setTimeout(show_in_tab, 500);
         }
@@ -105,15 +106,29 @@ function show_in_tab(){
                     extra_content += `</div>`;
             }
             
-                var i = 0;
-                for (i=0; i<solutions.length; i++){
-                    extra_content += `<div style="font-family: Arial, Helvetica, sans-serif;">`;
-                        extra_content += `<div id="solNumber"> Solution ` + (i+1) + `</div>`;
-                        extra_content += `<div id="solution-body" style="width:100%; height: fit-content; white-space: pre-line;">`;
-                            extra_content += solutions[i];
-                        extra_content += `</div>`;
+            var i = 0;
+            for (i=0; i<solutions.length; i++){
+                extra_content += `<div style="font-family: Arial, Helvetica, sans-serif;">`;
+                    extra_content += `<div id="solNumber"> Solution ` + (i+1) + `</div>`;
+                    extra_content += `<div id="solution-body" style="width:100%; height: fit-content; white-space: pre-line;">`;
+                        var numOfWorld = solutions[i].split(' ').length;
+                        var solution = solutions[i];
+                        var link = getLink(links[i]);
+                        if(numOfWorld > 40){
+                             solution = solutions[i].substring(0,40);
+                        }
+                        extra_content += solution;
+                        extra_content += `<a class="disable-me" href=${link}>`
+                        extra_content += "Visit Stackoverflow!";
+                        extra_content += `</a>`
+                        // extra_content += "<a href="+links[i]+">Visit Stackoverflow!</a>";
                     extra_content += `</div>`;
-                }
+                extra_content += `</div>`;
+
+                // codeLength(solutions[i]);
+               
+                // console.log(numOfWorld);
+            }
                 
             extra_content += `</div>`;           
         extra_content += `</div>`;
@@ -229,7 +244,38 @@ function correctWorld(error)
     }
 }
 
+function getLink(solutionLink)
+{
+    console.log(solutionLink);
+    var temp = solutionLink.substring(22);
+    for(let i =0 ; i< temp.length ; i++){
+        if(temp[i] == ">"){
+            end = i-1;
+            break;
+        }
+    }
+    // console.log(link)
+    var link = temp.substring(0 ,end);
+    console.log(link)
+    return link;
+    // console.log(linkses.substring(0 ,end))
+    // var end = link.indexOf(">");
+    // var linkses2 = link.substring(22 ,end);
+    // // for(let i =0 ; i< linkses.length ; i++){
+    // //     if(linkses[i] == ">"){
+    // //         end = i;
+    // //         break;
+    // //     }
+    // // }
+    // console.log(linkses2)
+    // console.log(end);
+    // // var linkses = link.substring(20 ,end);
+    // // console.log("link is "+linkses)
+
+}
+
 var solutions = [];
+var links = [];
 var error;
 var globa_extra = "";
 add_the_solution_tag();
