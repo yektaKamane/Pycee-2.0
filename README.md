@@ -19,6 +19,5 @@ $ git clone https://github.com/yektaKamane/Pycee-2.0.git
 Some screenshots of the online IDE with Pycee
 
 
-![pic1](https://user-images.githubusercontent.com/44814811/150676154-86316d90-6ad5-4410-a3be-089ec0fdf0ce.png)
-
-![pic2](https://user-images.githubusercontent.com/44814811/150676290-59b84ab7-ef9e-4086-a29b-3781b238378a.png)
+![pic2](https://user-images.githubusercontent.com/44814811/150676633-83abacc7-8a83-4367-81be-580c33e090c8.png)
+![pic1](https://user-images.githubusercontent.com/44814811/150676645-90f89035-b9f6-4569-a292-69ebdb3d5179.png)
