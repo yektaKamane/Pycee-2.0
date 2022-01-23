@@ -16,5 +16,9 @@ $ git clone https://github.com/yektaKamane/Pycee-2.0.git
 
 4. Click **Load unpacked extension** button and select `Extension` folder to install it.
 
-![image](https://user-images.githubusercontent.com/44814811/150675720-a33dc400-d329-4261-977f-4af4b5b4e93e.png)
 
+![pic1](https://user-images.githubusercontent.com/44814811/150676154-86316d90-6ad5-4410-a3be-089ec0fdf0ce.png)
+
+
+
+![pic2](https://user-images.githubusercontent.com/44814811/150676290-59b84ab7-ef9e-4086-a29b-3781b238378a.png)
